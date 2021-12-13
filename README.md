@@ -1,4 +1,4 @@
-# Download binance public
+# Download binance public kline data
 
 Download binance public kline data and auto increase 1 min kline data
 
