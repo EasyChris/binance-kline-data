@@ -26,7 +26,7 @@ apt install docker-compose git
 ## Run mongodb docker
 
 ```
-cd mongodb
+cd binance-kline-data/mongodb
 mkdir data init
 docker-compose up -d
 ```

@@ -8,7 +8,7 @@ password = 'admin'
 database_name = 'bianance_kline'
 # client mongoclinet with username and password
 mongo_client = pymongo.MongoClient(
-    "mongodb://admin:admin@localhost:28018/", connect=False)
+    f"mongodb://{username}:{password}@localhost:{port}/", connect=False)
 
 
 def get_mongo_conn(db=database_name):
