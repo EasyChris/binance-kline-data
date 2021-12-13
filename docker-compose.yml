@@ -3,12 +3,20 @@ services:
   mongo:
     image: mongo
     container_name: mongodb
-    restart: unless-stopped
+    restart: always
     ports:
-      - 28018:27017
+      - 27017:27017
     volumes:
       - ./data:/data/db/
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
       MONGO_INITDB_DATABASE: pokerstats
+  python:
+    build:
+      context: ./
+      dockerfile: python.dockerfile
+    volumes:
+      - ./code:/usr/src/app/code
+    depends_on:
+      - mongo

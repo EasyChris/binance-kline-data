@@ -4,7 +4,7 @@ https://github.com/binance/binance-public-data
 """
 import os
 import time
-import zipfile
+import zipfile36 as zipfile
 from concurrent.futures import ProcessPoolExecutor
 
 import pandas as pd

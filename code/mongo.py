@@ -1,14 +1,14 @@
 import pymongo
 from pymongo import mongo_client
 import datetime as dt
-host = 'localhost'
-port = 28018
+host = 'mongo'
+port = 27017
 username = 'admin'
 password = 'admin'
 database_name = 'bianance_kline'
 # client mongoclinet with username and password
 mongo_client = pymongo.MongoClient(
-    f"mongodb://{username}:{password}@localhost:{port}/", connect=False)
+    f"mongodb://{username}:{password}@{host}:{port}/", connect=False)
 
 
 def get_mongo_conn(db=database_name):

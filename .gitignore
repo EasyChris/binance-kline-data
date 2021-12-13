@@ -2,3 +2,4 @@
 __pycache__
 coin/*
 feather/*
+data/*
