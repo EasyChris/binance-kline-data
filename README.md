@@ -37,6 +37,14 @@ open config.py and add symbol that you need
 
 if you need add eth/usdt coin pair,in config.py file, `symbol_list` add "ETHUSDT" in symbol_list
 
+## Start download kline
+
+```
+pip install -r requirements.txt
+
+python data_index.py
+```
+
 # Thanks
 
 [binance-public-data](https://github.com/binance/binance-public-data)
