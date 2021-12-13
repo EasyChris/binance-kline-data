@@ -6,6 +6,6 @@ WORKDIR /usr/src/app
 
 RUN /usr/local/bin/python -m pip install --upgrade pip
 
-RUN pip install ccxt pandas requests zipfile36 pymongo
+RUN pip install ccxt pandas requests zipfile36 pymongo pyarrow
 
 CMD [ "python3", "/usr/src/app/code/data_index.py"]
