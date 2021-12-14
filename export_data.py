@@ -4,7 +4,7 @@ import os
 from config import feather_path
 
 
-def import_data_main():
+def export_data_main():
 
     collection_list = mongo.get_mongo_collection_name()
     for index, collection, in enumerate(collection_list):
@@ -27,4 +27,4 @@ def import_data_main():
 
 
 if __name__ == '__main__':
-    import_data_main()
+    export_data_main()

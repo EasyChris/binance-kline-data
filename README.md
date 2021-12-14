@@ -56,6 +56,12 @@ python mult_download.py
 python main.py
 ```
 
+## import feather file
+
+```
+python export_data.py
+```
+
 # Thanks
 
 [binance-public-data](https://github.com/binance/binance-public-data)
