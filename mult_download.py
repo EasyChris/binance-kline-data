@@ -13,7 +13,7 @@ def mult_download_data():
     if len(symbol_list) > 0:
         download_main(symbol_list)
     # 导入输入到mongodb
-        deal_data_main()
+        deal_data_main(symbol_list)
         print("批量历史数据下载完成")
 
 

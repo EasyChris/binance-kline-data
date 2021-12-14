@@ -60,7 +60,7 @@ def merge_data(candle_path, feather_path, file_list):
 
 
 @cal_time
-def deal_data_main():
+def deal_data_main(symbol_list):
     print(f'开始处理数据...')
     mkdir_dir(feather_path)
     mkdir_dir(candle_path)
