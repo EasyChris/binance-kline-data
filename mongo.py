@@ -5,7 +5,7 @@ host = 'localhost'
 port = 28018
 username = 'admin'
 password = 'admin'
-database_name = 'bianance_kline'
+database_name = 'binance_kline'
 # client mongoclinet with username and password
 mongo_client = pymongo.MongoClient(
     f"mongodb://{username}:{password}@localhost:{port}/", connect=False)
