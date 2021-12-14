@@ -2,7 +2,7 @@ from config import *
 import time
 import os
 import pandas as pd
-from tools import mkdir_dir
+from tools import mkdir_dir, import_data_from_csv
 
 # 修饰器
 
@@ -45,18 +45,18 @@ def merge_data(candle_path, feather_path, file_list):
     for file in file_list:
         file_path = os.path.join(candle_path, file)
         df_data = pd.read_csv(file_path, parse_dates=['candle_begin_time'])
-        df_list.append(df_data)
-    df = pd.concat(df_list, ignore_index=False)
-    # 去重、排序
-    df.drop_duplicates(subset=['candle_begin_time'], keep='last', inplace=True)
-    df.sort_values('candle_begin_time', inplace=True)
-    df.reset_index(drop=True, inplace=True)
+        import_data_from_csv(df_data, file)
+    # df = pd.concat(df_list, ignore_index=False)
+    # # 去重、排序
+    # df.drop_duplicates(subset=['candle_begin_time'], keep='last', inplace=True)
+    # df.sort_values('candle_begin_time', inplace=True)
+    # df.reset_index(drop=True, inplace=True)
 
-    list_last = file_list[len(file_list)-1].replace('.csv', '')[-7:]
-    file_name = file_list[0].replace('.csv', '') + '-' + list_last + '.feather'
-    # save to feather
-    df.to_feather(os.path.join(feather_path, file_name))
-    print(f"{file_name}处理完成")
+    # list_last = file_list[len(file_list)-1].replace('.csv', '')[-7:]
+    # file_name = file_list[0].replace('.csv', '') + '-' + list_last + '.feather'
+    # # save to feather
+    # df.to_feather(os.path.join(feather_path, file_name))
+    # print(f"{file_name}处理完成")
 
 
 @cal_time

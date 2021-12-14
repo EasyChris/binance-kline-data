@@ -69,4 +69,6 @@ def fetch_data_main(symbol, interval):
             # 计算下一次需要拉取的时间,用现在的时间加上间隔，为了减少并发
             sleep_time = get_interval_secend(interval)
             print(symbol, interval, 'sleep time', sleep_time)
+            print("next fetch data time", datetime.datetime.now() +
+                  datetime.timedelta(seconds=sleep_time), "\n")
             time.sleep(sleep_time)

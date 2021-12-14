@@ -1,7 +1,7 @@
 import os
 
 # 加入你需要下载的币对，比如你要下载SOL和USDT 加入 “SOLUSDT”到symbol_list
-symbol_list = ["SOLUSDT", "ETHUSDT", "BTCUSDT", "MINAUSDT"]
+symbol_list = ["SOLUSDT", "MINAUSDT"]
 # 下载k线时间间隔，这里为1m，可以改成5m、15m、1h、1d等。
 intervals = ["1m"]
 # 需要下载数据等年份
@@ -23,3 +23,6 @@ feather_path = './feather'
 
 # mongodb config
 mongo_db_name = 'bianance_kline'
+
+SHORT_SLEEP_TIME = 2
+MEDIAN_SLEEP_TIME = 30

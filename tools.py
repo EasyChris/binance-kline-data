@@ -54,6 +54,21 @@ def clean_data(old_data):
     return old_data
 
 
+# 导入csv数据到mongodb
+def import_data_from_csv(df, file_name):
+    # read pandas feaether file
+    print("import csv data", file_name)
+    collection_name = file_name.split('-')[0]+'_'+file_name.split('-')[1]
+    db = mongo.get_mongo_conn()[collection_name]
+    # pymongo is collection exist
+    if collection_name not in mongo.get_mongo_collection_name():
+        db.create_index(
+            [('candle_begin_time', pymongo.ASCENDING)], unique=True)
+    df = clean_data(df)
+    db.insert_many(df.to_dict('records'))
+    print(r"csv file: %s import success" % file_name)
+
+
 # 导入feather数据到mongodb
 
 
