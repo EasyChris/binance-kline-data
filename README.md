@@ -37,12 +37,23 @@ open config.py and add symbol that you need
 
 if you need add eth/usdt coin pair,in config.py file, `symbol_list` add "ETHUSDT" in symbol_list
 
-## Start download kline
+## Install dependencies
 
 ```
 pip install ccxt pandas requests zipfile36 pymongo pyarrow
 
-python data_index.py
+```
+
+## start download history kline data
+
+```
+python mult_download.py
+```
+
+## handle download kline data
+
+```
+python main.py
 ```
 
 # Thanks
