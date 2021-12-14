@@ -22,7 +22,7 @@ feather_path = './feather'
 
 
 # mongodb config
-mongo_db_name = 'bianance_kline'
+mongo_db_name = 'binance_kline'
 
 SHORT_SLEEP_TIME = 2
 MEDIAN_SLEEP_TIME = 30
