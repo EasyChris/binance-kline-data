@@ -4,6 +4,7 @@ from tools import retry_wrapper
 import ccxt
 import pandas as pd
 import time
+from config import SHORT_SLEEP_TIME
 
 # def find_last_data(conn, collection_name):
 #     return db.data.find().sort('timestamp', -1).limit(1)
@@ -50,7 +51,8 @@ def get_interval_secend(interval):
     return since_time
 
 
-def fetch_data_main(symbol, interval):
+def fetch_data_main(symbol, interval, flag):
+    time.sleep(flag)
     collection_name = symbol + '_' + interval
     db = mongo.get_mongo_conn()[collection_name]
     time_diff_minute = get_diff_time(collection_name)
@@ -63,11 +65,14 @@ def fetch_data_main(symbol, interval):
             db.insert_many(olhc_data.to_dict('records'))
         time_diff_minute = get_diff_time(collection_name)
         if time_diff_minute >= 500:
-            print(symbol, interval, 'sleep 1s')
-            time.sleep(1)
+            sleep_time = int(flag)
+            print(symbol, interval, f"sleep {sleep_time}", "\n")
+            print("next fetch data time", datetime.datetime.now() +
+                  datetime.timedelta(seconds=sleep_time), "\n")
+            time.sleep(sleep_time)
         else:
             # 计算下一次需要拉取的时间,用现在的时间加上间隔，为了减少并发
-            sleep_time = get_interval_secend(interval)
+            sleep_time = get_interval_secend(interval) + int(flag)
             print(symbol, interval, 'sleep time', sleep_time)
             print("next fetch data time", datetime.datetime.now() +
                   datetime.timedelta(seconds=sleep_time), "\n")
