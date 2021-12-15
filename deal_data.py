@@ -2,7 +2,7 @@ from config import *
 import time
 import os
 import pandas as pd
-from tools import mkdir_dir, import_data_from_csv
+from tools import mkdir_dir, import_data_from_csv, filter_groups_collection
 
 # 修饰器
 
@@ -27,6 +27,7 @@ def get_symbol_list(candle_path, symbol_list):
     # fitler with .csv
     folders = [folder for folder in folders if folder.endswith('.csv')]
     folders.sort()
+    folders = filter_groups_collection(folders)
     group_folder = []
     for symbol in symbol_list:
         folder_list = []
@@ -46,7 +47,6 @@ def merge_data(candle_path, feather_path, file_list):
         file_path = os.path.join(candle_path, file)
         df_data = pd.read_csv(file_path, parse_dates=['candle_begin_time'])
         import_data_from_csv(df_data, file)
-    
 
 
 @cal_time

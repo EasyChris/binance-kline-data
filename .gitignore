@@ -4,3 +4,5 @@ coin/*
 feather/*
 data/*
 mongodb/*
+.t1.py
+__init__.py

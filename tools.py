@@ -37,11 +37,41 @@ def filter_new_collection(symbols):
     # 获取mongodb的collection name
     collection_list = mongo.get_mongo_collection_name()
     new_symbols = []
+    symbol_name_list = []
     for symbol in symbols:
         for interval in intervals:
-            if symbol + '_' + interval not in collection_list:
+            symbol_name = symbol + '_' + interval
+            if symbol_name not in collection_list:
+                symbol_name_list.append(symbol_name)
                 new_symbols.append(symbol)
+    print("开始下载", symbol_name_list)
     return new_symbols
+
+
+def filter_urls_collection(urls):
+    # 获取mongodb的collection name
+    collection_list = mongo.get_mongo_collection_name()
+    # replace collection_list _ to -
+    collection_list = [x.replace('_', '-') for x in collection_list]
+    new_urls = []
+    for url in urls:
+        if url not in collection_list:
+            new_urls.append(url)
+    return new_urls
+
+
+def filter_groups_collection(groups):
+    # 获取mongodb的collection name
+    collection_list = mongo.get_mongo_collection_name()
+    collection_list = [x.replace('_', '-') for x in collection_list]
+    print(collection_list)
+    new_groups = []
+    for group in groups:
+        g = group.split('-')
+        g_name = g[0]+'-'+g[1]
+        if g_name not in collection_list:
+            new_groups.append(group)
+    return new_groups
 
 # 清理数据
 

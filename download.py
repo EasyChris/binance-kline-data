@@ -10,7 +10,8 @@ from concurrent.futures import ProcessPoolExecutor
 import pandas as pd
 import requests
 from config import *
-from tools import mkdir_dir
+import mongo
+from tools import mkdir_dir, filter_urls_collection
 
 
 # 修饰器
@@ -28,11 +29,16 @@ def cal_time(func):
 # 获取下载的url
 def generate_url(symbols):
     base_url = 'https://data.binance.vision/data/spot/monthly/klines'
-
+    collection_list = mongo.get_mongo_collection_name()
+    # collection_list = [x.replace('_', '-') for x in collection_list]
     urls = []
     download_list = []
     for symbol in symbols:
         for interval in intervals:
+            # 过滤已经存在的symbol数据
+            symbol_name = symbol + '_' + interval
+            if symbol_name in collection_list:
+                continue
             for year in years:
                 for month in months:
                     url = f"{base_url}/{symbol}/{interval}/{symbol}-{interval}-{year}-{month}.zip"

@@ -40,7 +40,7 @@ def get_diff_time(collection_name):
 
 
 def get_interval_secend(interval):
-    interval_time = int(interval[:1])
+    interval_time = int(interval[:-1])
     if interval.endswith('m'):
         next = datetime.timedelta(minutes=interval_time)
     if interval.endswith('h'):
@@ -59,21 +59,25 @@ def fetch_data_main(symbol, interval, flag):
     # 如果时间大于等于500，那么需要3秒拉一次，尽快拉到最新的数据
     while True:
         since = mongo.get_last_data(collection_name)[0]['candle_begin_time']
-        print('fetch data start time', symbol, since, "\n")
+        # print('fetch data start time', symbol, since, "\n")
         olhc_data = fetch_binance_olhc(symbol, interval, since)
         if not olhc_data.empty:
             db.insert_many(olhc_data.to_dict('records'))
         time_diff_minute = get_diff_time(collection_name)
         if time_diff_minute >= 500:
             sleep_time = int(flag)
+            print('------------------------------------------------------ \n')
             print(symbol, interval, f"sleep {sleep_time}", "\n")
-            print("next fetch data time", datetime.datetime.now() +
+            print("NEXT fetch time:", datetime.datetime.now() +
                   datetime.timedelta(seconds=sleep_time), "\n")
+            print('------------------------------------------------------')
             time.sleep(sleep_time)
         else:
             # 计算下一次需要拉取的时间,用现在的时间加上间隔，为了减少并发
             sleep_time = get_interval_secend(interval) + int(flag)
+            print('------------------------------------------------------ \n')
             print(symbol, interval, 'sleep time', sleep_time)
-            print("next fetch data time", datetime.datetime.now() +
+            print("NEXT fetch time:", datetime.datetime.now() +
                   datetime.timedelta(seconds=sleep_time), "\n")
+            print('------------------------------------------------------')
             time.sleep(sleep_time)
