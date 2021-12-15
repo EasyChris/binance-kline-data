@@ -7,6 +7,28 @@ from config import intervals, feather_path
 import pandas as pd
 import time
 
+
+def get_all_timestamp(df_data):
+    # 获得 timestamp 列表 转换成数组
+    return df_data['candle_begin_time'].values.tolist()
+
+
+def filter_exsit_data_mult(collection, df_data):
+    timestamp_list = get_all_timestamp(df_data)
+    res = collection.find({"candle_begin_time": {"$in": timestamp_list}})
+    res_list = list(res)
+    # 没有找到数据，直接全部插入
+    if len(res_list) == 0:
+        return df_data
+    else:
+        # 找到数据，过滤掉已经存在的数据
+        exist_timestamp_list = []
+        for item in res_list:
+            exist_timestamp_list.append(item['candle_begin_time'])
+        df_data = df_data[~df_data['candle_begin_time'].isin(
+            exist_timestamp_list)]
+        return df_data
+
 # 重试装饰器
 
 
@@ -45,7 +67,7 @@ def filter_new_collection(symbols):
                 symbol_name_list.append(symbol_name)
                 new_symbols.append(symbol)
     print("开始下载", symbol_name_list)
-    return new_symbols
+    return new_symbols, symbol_name_list
 
 
 def filter_urls_collection(urls):
@@ -95,6 +117,8 @@ def import_data_from_csv(df, file_name):
         db.create_index(
             [('candle_begin_time', pymongo.ASCENDING)], unique=True)
     df = clean_data(df)
+    df = filter_exsit_data_mult(db, df)
+    print(df.shape)
     db.insert_many(df.to_dict('records'))
     print(r"csv file: %s import success" % file_name)
 

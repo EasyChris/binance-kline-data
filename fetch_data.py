@@ -59,16 +59,19 @@ def fetch_data_main(symbol, interval, flag):
     # 如果时间大于等于500，那么需要3秒拉一次，尽快拉到最新的数据
     while True:
         since = mongo.get_last_data(collection_name)[0]['candle_begin_time']
-        # print('fetch data start time', symbol, since, "\n")
+        print('补充数据-拉取时间', symbol, interval, since, "\n")
         olhc_data = fetch_binance_olhc(symbol, interval, since)
+        # df count rows
+        count = olhc_data.shape[0]
+        print("new data count:", count)
         if not olhc_data.empty:
             db.insert_many(olhc_data.to_dict('records'))
         time_diff_minute = get_diff_time(collection_name)
-        if time_diff_minute >= 500:
+        if count >= 499:
             sleep_time = int(flag)
             print('------------------------------------------------------ \n')
             print(symbol, interval, f"sleep {sleep_time}", "\n")
-            print("NEXT fetch time:", datetime.datetime.now() +
+            print("补充数据 - NEXT fetch time:", datetime.datetime.now() +
                   datetime.timedelta(seconds=sleep_time), "\n")
             print('------------------------------------------------------')
             time.sleep(sleep_time)

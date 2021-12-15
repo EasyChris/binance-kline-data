@@ -28,6 +28,7 @@ def get_symbol_list(candle_path, symbol_list):
     folders = [folder for folder in folders if folder.endswith('.csv')]
     folders.sort()
     folders = filter_groups_collection(folders)
+    print(folders)
     group_folder = []
     for symbol in symbol_list:
         folder_list = []
@@ -35,10 +36,11 @@ def get_symbol_list(candle_path, symbol_list):
             if symbol in folder:
                 folder_list.append(folder)
         group_folder.append(folder_list)
+    # remove duplicate
     return group_folder
 
 
-def merge_data(candle_path, feather_path, file_list):
+def merge_data(candle_path, file_list):
     """
     合并文件
     """
@@ -58,7 +60,7 @@ def deal_data_main(symbol_list):
     # remove empty list
     group_list = [x for x in group_list if x]
     for group in group_list:
-        merge_data(candle_path, feather_path, group)
+        merge_data(candle_path, group)
     print(f'处理数据完成...')
 
 
