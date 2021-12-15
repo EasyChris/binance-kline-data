@@ -59,7 +59,7 @@ def fetch_data_main(symbol, interval, flag):
     # 如果时间大于等于500，那么需要3秒拉一次，尽快拉到最新的数据
     while True:
         since = mongo.get_last_data(collection_name)[0]['candle_begin_time']
-        print('补充数据-拉取时间', symbol, interval, since, "\n")
+        print('拉取时间', symbol, interval, since, "\n")
         olhc_data = fetch_binance_olhc(symbol, interval, since)
         # df count rows
         count = olhc_data.shape[0]
