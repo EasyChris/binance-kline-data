@@ -1,3 +1,4 @@
+from os import error
 import mongo
 import datetime
 from tools import retry_wrapper
@@ -58,29 +59,37 @@ def fetch_data_main(symbol, interval, flag):
     time_diff_minute = get_diff_time(collection_name)
     # 如果时间大于等于500，那么需要3秒拉一次，尽快拉到最新的数据
     while True:
-        since = mongo.get_last_data(collection_name)[0]['candle_begin_time']
-        print('拉取时间', symbol, interval, since, "\n")
-        olhc_data = fetch_binance_olhc(symbol, interval, since)
-        # df count rows
-        count = olhc_data.shape[0]
-        print("new data count:", count)
-        if not olhc_data.empty:
-            db.insert_many(olhc_data.to_dict('records'))
-        time_diff_minute = get_diff_time(collection_name)
-        if count >= 499:
-            sleep_time = int(flag)
+        try:
+            since = mongo.get_last_data(collection_name)[
+                0]['candle_begin_time']
+            print('拉取时间', symbol, interval, since, "\n")
+            olhc_data = fetch_binance_olhc(symbol, interval, since)
+            # df count rows
+            count = olhc_data.shape[0]
+            print("new data count:", count)
+            if not olhc_data.empty:
+                db.insert_many(olhc_data.to_dict('records'))
+            time_diff_minute = get_diff_time(collection_name)
+            if count >= 499:
+                sleep_time = int(flag)
+                print('------------------------------------------------------ \n')
+                print(symbol, interval, f"sleep {sleep_time}", "\n")
+                print("补充数据 - NEXT fetch time:", datetime.datetime.now() +
+                      datetime.timedelta(seconds=sleep_time), "\n")
+                print('------------------------------------------------------')
+                time.sleep(sleep_time)
+            else:
+                # 计算下一次需要拉取的时间,用现在的时间加上间隔，为了减少并发
+                sleep_time = get_interval_secend(interval) + int(flag)
+                print('------------------------------------------------------ \n')
+                print(symbol, interval, 'sleep time', sleep_time)
+                print("NEXT fetch time:", datetime.datetime.now() +
+                      datetime.timedelta(seconds=sleep_time), "\n")
+                print('------------------------------------------------------')
+                time.sleep(sleep_time)
+        except error:
             print('------------------------------------------------------ \n')
-            print(symbol, interval, f"sleep {sleep_time}", "\n")
-            print("补充数据 - NEXT fetch time:", datetime.datetime.now() +
-                  datetime.timedelta(seconds=sleep_time), "\n")
-            print('------------------------------------------------------')
-            time.sleep(sleep_time)
-        else:
-            # 计算下一次需要拉取的时间,用现在的时间加上间隔，为了减少并发
-            sleep_time = get_interval_secend(interval) + int(flag)
-            print('------------------------------------------------------ \n')
-            print(symbol, interval, 'sleep time', sleep_time)
-            print("NEXT fetch time:", datetime.datetime.now() +
-                  datetime.timedelta(seconds=sleep_time), "\n")
-            print('------------------------------------------------------')
-            time.sleep(sleep_time)
+            print(symbol, interval, 'sleep time', SHORT_SLEEP_TIME)
+            print(error)
+            time.sleep(SHORT_SLEEP_TIME)
+            continue
